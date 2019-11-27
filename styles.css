@@ -1,0 +1,32 @@
+body {
+  width: auto;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: rgba(10, 10, 10, 0.205);
+}
+
+.box {
+  display: flex;
+  justify-content: space-around;
+}
+
+.image_du_cameroun img {
+  width: 400px;
+  height: 400px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+footer {
+  text-align: center;
+}
+.imageDroite {
+  display: flex;
+}
+.Partie_1 {
+  display: flex;
+}
+.Partie_2 {
+  display: flex;
+  justify-content: space-between;
+}
