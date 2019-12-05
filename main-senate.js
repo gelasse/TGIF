@@ -1,6 +1,22 @@
+var members = [];
+const url = "https://api.propublica.org/congress/v1/113/senate/members.json";
+fetch(url, {
+  headers: {
+    "Content-Type": "application/json",
+    "X-API-Key": "8nEXIV8d6osHNmpUT5CJ5XjNaHoi7q3mJuVCzdWq"
+  }
+})
+  .then(resp => resp.json())
+  .then(function(data) {
+    console.log(data);
+    members = data.results[0].members;
+    console.log(members);
+    createDropdown();
+    tableOfAllMembers();
+  });
+
 var table = document.getElementById("senate-data");
-var members = data.results[0].members;
-console.log(members);
+
 console.log(table);
 
 for (let i of members) {
@@ -97,88 +113,74 @@ getDemocrats();
 getIndependants();
 console.log(tabeR.length);
 
-eltR.addEventListener("click", function() {
-  table.innerHTML = "";
-  for (let i of tabeR) {
-    tr = document.createElement("tr");
-    td1 = document.createElement("td");
-    td2 = document.createElement("td");
-    td3 = document.createElement("td");
-    td4 = document.createElement("td");
-    td5 = document.createElement("td");
+function checkboxesFilter() {
+  var array = [];
+  var checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
+  console.log(checkboxes);
 
-    td1.innerHTML = i.first_name + " " + i.last_name;
-    td2.innerHTML = i.party;
-    td3.innerHTML = i.state;
-    td4.innerHTML = i.seniority;
-    td5.innerHTML = i.votes_with_party_pct;
-
-    console.log(td1);
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-
-    table.appendChild(tr);
+  for (var i = 0; i < checkboxes.length; i++) {
+    array.push(checkboxes[i].value);
   }
-});
+  console.log(array);
+  return array;
+}
 
-eltD.addEventListener("click", function() {
-  table.innerHTML = "";
-  for (let i of tabeD) {
-    tr = document.createElement("tr");
-    td1 = document.createElement("td");
-    td2 = document.createElement("td");
-    td3 = document.createElement("td");
-    td4 = document.createElement("td");
-    td5 = document.createElement("td");
-
-    td1.innerHTML = i.first_name + " " + i.last_name;
-    td2.innerHTML = i.party;
-    td3.innerHTML = i.state;
-    td4.innerHTML = i.seniority;
-    td5.innerHTML = i.votes_with_party_pct;
-
-    console.log(td1);
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-
-    table.appendChild(tr);
+let eltSection = document.getElementById("state");
+function createDropdown() {
+  for (i of members) {
+    let eltOption = document.createElement("option");
+    eltOption.setAttribute("value", i.state);
+    eltOption.innerHTML = i.state;
+    eltSection.appendChild(eltOption);
   }
-});
-
-eltI.addEventListener("click", function() {
+}
+function getSelectedValue() {
+  var result = eltSection.options[eltSection.selectedIndex].value;
+  console.log(result);
+  return result;
+}
+function tableOfAllMembers() {
+  var checkboxesValue = checkboxesFilter();
+  console.log(checkboxesValue);
+  let checkStateValue = getSelectedValue();
   table.innerHTML = "";
-  for (let i of tabeI) {
-    tr = document.createElement("tr");
-    td1 = document.createElement("td");
-    td2 = document.createElement("td");
-    td3 = document.createElement("td");
-    td4 = document.createElement("td");
-    td5 = document.createElement("td");
 
-    td1.innerHTML = i.first_name + " " + i.last_name;
-    td2.innerHTML = i.party;
-    td3.innerHTML = i.state;
-    td4.innerHTML = i.seniority;
-    td5.innerHTML = i.votes_with_party_pct;
+  for (let i of members) {
+    if (
+      (checkboxesValue.includes(i.party) && checkStateValue == i.state) ||
+      (checkboxesValue.includes(i.party) && checkStateValue == "all")
+    ) {
+      tr = document.createElement("tr");
+      td1 = document.createElement("td");
+      td2 = document.createElement("td");
+      td3 = document.createElement("td");
+      td4 = document.createElement("td");
+      td5 = document.createElement("td");
 
-    console.log(td1);
+      td1.innerHTML = i.first_name + " " + i.last_name;
+      td2.innerHTML = i.party;
+      td3.innerHTML = i.state;
+      td4.innerHTML = i.seniority;
+      td5.innerHTML = i.votes_with_party_pct;
 
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
+      //console.log(td1);
 
-    table.appendChild(tr);
+      tr.appendChild;
+      tr.appendChild(td2);
+      tr.appendChild(td3);
+      tr.appendChild(td4);
+      tr.appendChild(td5);
+
+      table.appendChild(tr);
+    }
   }
-});
+}
 
-console.log(tabeI.length);
+let eltparty = document.getElementsByClassName("party");
+for (let i = 0; i < eltparty.length; i++) {
+  eltparty[i].addEventListener("click", function() {
+    console.log(eltparty[i].value);
+    tableOfAllMembers();
+  });
+}
+eltSection.addEventListener("click", tableOfAllMembers);

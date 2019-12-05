@@ -97,7 +97,7 @@ let tabMin = [];
 members.sort(function(a, b) {
   return a.missed_votes_pct - b.missed_votes_pct;
 });
-for (let i = 0; i < 11; i++) {
+for (let i = 0; i < (members.length * 10) / 100; i++) {
   tabMin.push(members[i]);
 }
 
@@ -106,7 +106,7 @@ members.sort(function(a, b) {
   return b.missed_votes_pct - a.missed_votes_pct;
 });
 
-for (let i = 0; i < 11; i++) {
+for (let i = 0; i < (members.length * 10) / 100; i++) {
   tabMax.push(members[i]);
 }
 
@@ -115,7 +115,14 @@ document.getElementById("rep_pourcentage").innerHTML = averageR / nombreR;
 document.getElementById("dem_nombre").innerHTML = nombreD;
 document.getElementById("dem_pourcentage").innerHTML = averageD / nombreD;
 document.getElementById("in_nombre").innerHTML = nombreI;
-document.getElementById("in_pourcentage").innerHTML = averageI / nombreI;
+function in_pourcentage() {
+  if (nombreI == 0) {
+    document.getElementById("in_pourcentage").innerHTML = 0;
+  } else {
+    document.getElementById("in_pourcentage").innerHTML = averageI / nombreI;
+  }
+}
+in_pourcentage();
 
 function senatePartyLoyalityLeastLoyal() {
   var tbody = document.getElementById("leastLoyal");
